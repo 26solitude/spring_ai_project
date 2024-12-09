@@ -1,4 +1,4 @@
-package org.example.spring_ai_project.service;
+package org.example.spring_ai_project.ex1.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

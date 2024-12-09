@@ -1,6 +1,6 @@
-package org.example.spring_ai_project.controller;
+package org.example.spring_ai_project.ex1.controller;
 
-import org.example.spring_ai_project.service.OpenAIService;
+import org.example.spring_ai_project.ex1.service.OpenAIService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
