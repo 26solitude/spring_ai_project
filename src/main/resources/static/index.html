@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Streaming Response</title>
+</head>
+<body>
+<h1>Streaming Output</h1>
+<button id="startBtn">Start</button>
+<div id="output" style="white-space: pre-wrap;"></div>
+
+<script>
+    document.getElementById('startBtn').addEventListener('click', () => {
+        const outputDiv = document.getElementById('output');
+        outputDiv.textContent = '';
+
+        const eventSource = new EventSource('/streamRes');
+        let accumulatedText = '';
+
+        eventSource.onmessage = (event) => {
+            // 토큰을 누적
+            accumulatedText += event.data;
+
+            // 변환 없이 그대로 표시
+            outputDiv.textContent = accumulatedText;
+        };
+
+        eventSource.onerror = (err) => {
+            console.error("EventSource error:", err);
+            eventSource.close();
+        };
+    });
+</script>
+</body>
+</html>

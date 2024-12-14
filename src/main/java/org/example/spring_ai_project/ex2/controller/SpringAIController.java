@@ -2,8 +2,8 @@ package org.example.spring_ai_project.ex2.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -106,26 +106,37 @@ public class SpringAIController {
         );
     }
     
-    @GetMapping("/streamRes")
-    public void streamActorFilms(){
-        var converter = new BeanOutputConverter<>(new ParameterizedTypeReference<List<ActorFilms>>() {
-        });
+//    @GetMapping("/streamRes")
+//    public void streamActorFilms(){
+//        var converter = new BeanOutputConverter<>(new ParameterizedTypeReference<List<ActorFilms>>() {
+//        });
+//
+//        Flux<String> flux = chatClient.prompt()
+//                .user(u -> u.text("""
+//                        Generate the filmography for a random actor.
+//                        {format}
+//                        """)
+//                .param("format", converter.getFormat()))
+//                .stream()
+//                .content();
+//
+//        String content = flux.collectList().block().stream().collect(Collectors.joining());
+//        List<ActorFilms> actorFilms = converter.convert(content);
+//
+//        actorFilms.forEach(film ->{
+//            System.out.println("Actor: " + film.actor());
+//            System.out.println("Movies: " + String.join(",", film.movies()));
+//        });
+//    }
 
-        Flux<String> flux = chatClient.prompt()
+    @GetMapping(value = "/streamRes", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> streamResponse() {
+        return chatClient.prompt()
                 .user(u -> u.text("""
-                        Generate the filmography for a random actor.
-                        {format}
-                        """)
-                .param("format", converter.getFormat()))
+                    한국어로 랩 가사를 생성해줘. 주제는 짜파게티야.
+                    """))
                 .stream()
-                .content();
-
-        String content = flux.collectList().block().stream().collect(Collectors.joining());
-        List<ActorFilms> actorFilms = converter.convert(content);
-
-        actorFilms.forEach(film ->{
-            System.out.println("Actor: " + film.actor());
-            System.out.println("Movies: " + String.join(",", film.movies()));
-        });
+                .content(); // 여기서는 추가 가공 없이 그대로 반환
     }
+
 }
