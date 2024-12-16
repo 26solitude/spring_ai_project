@@ -130,13 +130,14 @@ public class SpringAIController {
 //    }
 
     @GetMapping(value = "/streamRes", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> streamResponse() {
+    public Flux<String> streamResponse(@RequestParam String prompt) {
         return chatClient.prompt()
-                .user(u -> u.text("""
-                    한국어로 랩 가사를 생성해줘. 주제는 짜파게티야.
-                    """))
+                .user(u -> u.text(prompt))
                 .stream()
                 .content(); // 여기서는 추가 가공 없이 그대로 반환
     }
+
+
+
 
 }
